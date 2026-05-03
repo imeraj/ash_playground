@@ -14,9 +14,7 @@ defmodule TunezWeb.Artists.IndexLive do
   def handle_params(params, _url, socket) do
     query_text = Map.get(params, "q", "")
     sort_by = Map.get(params, "sort_by") |> validate_sort_by()
-
-    page_params =
-      AshPhoenix.LiveView.params_to_page_opts(params, count?: params["count"] == "true")
+    page_params = AshPhoenix.LiveView.params_to_page_opts(params, default_limit: 12, count?: true)
 
     page =
       Tunez.Music.search_artists!(query_text, page: page_params, query: [sort_input: sort_by])
