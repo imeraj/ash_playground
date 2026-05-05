@@ -1,5 +1,25 @@
 defmodule Tunez.Music.Artist do
-  use Ash.Resource, otp_app: :tunez, domain: Tunez.Music, data_layer: AshPostgres.DataLayer
+  use Ash.Resource,
+    otp_app: :tunez,
+    domain: Tunez.Music,
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshJsonApi.Resource]
+
+  json_api do
+    type "artist"
+
+    # Default fields to return when no `fields` query param is provided
+    default_fields [
+      :id,
+      :name,
+      :biography,
+      :album_count,
+      :latest_album_year_released
+    ]
+
+    # Includable relationships
+    includes albums: []
+  end
 
   postgres do
     table "artists"
@@ -41,10 +61,13 @@ defmodule Tunez.Music.Artist do
       public? true
     end
 
-    attribute :biography, :string
+    attribute :biography, :string do
+      public? true
+    end
 
     attribute :previous_names, {:array, :string} do
       default []
+      public? true
     end
 
     create_timestamp :inserted_at, public?: true
