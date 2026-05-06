@@ -19,6 +19,7 @@ defmodule Tunez.Music.Artist do
 
     # Includable relationships
     includes albums: []
+    derive_filter? false
   end
 
   postgres do
@@ -77,6 +78,7 @@ defmodule Tunez.Music.Artist do
   relationships do
     has_many :albums, Tunez.Music.Album do
       sort year_released: :desc
+      public? true
     end
   end
 
