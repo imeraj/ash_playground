@@ -3,7 +3,12 @@ defmodule Tunez.Music.Artist do
     otp_app: :tunez,
     domain: Tunez.Music,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshJsonApi.Resource]
+    extensions: [AshGraphql.Resource, AshJsonApi.Resource]
+
+  graphql do
+    type :artist
+    filterable_fields [:album_count, :cover_image_url, :latest_album_year_released]
+  end
 
   json_api do
     type "artist"
@@ -91,6 +96,8 @@ defmodule Tunez.Music.Artist do
       public? true
     end
 
-    first :cover_image_url, :albums, :cover_image_url
+    first :cover_image_url, :albums, :cover_image_url do
+      public? true
+    end
   end
 end
