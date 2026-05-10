@@ -28,6 +28,7 @@ defmodule TunezWeb.Layouts do
           </.link>
         </div>
       </div>
+      <.user_info current_user={@current_user} socket={@socket} />
       <div class="px-4">
         <.flash_group flash={@flash} />
 
