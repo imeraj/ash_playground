@@ -1,6 +1,8 @@
 import Config
 config :ash, policies: [show_policy_breakdowns?: true]
 
+config :ash_authentication, debug_authentication_failures?: true
+
 # Configure your database
 config :tunez, Tunez.Repo,
   username: "meraj",
