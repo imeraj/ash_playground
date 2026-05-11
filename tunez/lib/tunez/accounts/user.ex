@@ -4,7 +4,7 @@ defmodule Tunez.Accounts.User do
     domain: Tunez.Accounts,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer],
-    extensions: [AshAuthentication]
+    extensions: [AshJsonApi.Resource, AshAuthentication]
 
   authentication do
     add_ons do
@@ -54,6 +54,10 @@ defmodule Tunez.Accounts.User do
         sender Tunez.Accounts.User.Senders.SendMagicLinkEmail
       end
     end
+  end
+
+  json_api do
+    type "user"
   end
 
   postgres do
@@ -265,6 +269,16 @@ defmodule Tunez.Accounts.User do
       end
 
       run AshAuthentication.Strategy.MagicLink.Request
+    end
+  end
+
+  policies do
+    bypass AshAuthentication.Checks.AshAuthenticationInteraction do
+      authorize_if always()
+    end
+
+    policy action([:register_with_password, :sign_in_with_password]) do
+      authorize_if always()
     end
   end
 
