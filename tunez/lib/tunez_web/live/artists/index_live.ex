@@ -70,7 +70,7 @@ defmodule TunezWeb.Artists.IndexLive do
         <:action>
           <.sort_changer selected={@sort_by} />
         </:action>
-        <:action>
+        <:action :if={Tunez.Music.can_create_artist?(@current_user)}>
           <.button_link navigate={~p"/artists/new"} kind="primary">
             New Artist
           </.button_link>
