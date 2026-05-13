@@ -3,7 +3,6 @@ defmodule TunezWeb.LiveUserAuth do
   Helpers for authenticating users in LiveViews.
   """
 
-  import Phoenix.Component
   use TunezWeb, :verified_routes
 
   # This is used for nested liveviews to fetch the current user.
@@ -13,15 +12,14 @@ defmodule TunezWeb.LiveUserAuth do
     {:cont, AshAuthentication.Phoenix.LiveSession.assign_new_resources(socket, session)}
   end
 
-  def on_mount(:live_user_optional, _params, _session, socket) do
-    if socket.assigns[:current_user] do
-      {:cont, socket}
-    else
-      {:cont, assign(socket, :current_user, nil)}
-    end
+  def on_mount(:live_user_optional, _params, session, socket) do
+    socket = AshAuthentication.Phoenix.LiveSession.assign_new_resources(socket, session)
+    {:cont, socket}
   end
 
-  def on_mount(:live_user_required, _params, _session, socket) do
+  def on_mount(:live_user_required, _params, session, socket) do
+    socket = AshAuthentication.Phoenix.LiveSession.assign_new_resources(socket, session)
+
     if socket.assigns[:current_user] do
       {:cont, socket}
     else
@@ -29,11 +27,13 @@ defmodule TunezWeb.LiveUserAuth do
     end
   end
 
-  def on_mount(:live_no_user, _params, _session, socket) do
+  def on_mount(:live_no_user, _params, session, socket) do
+    socket = AshAuthentication.Phoenix.LiveSession.assign_new_resources(socket, session)
+
     if socket.assigns[:current_user] do
       {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/")}
     else
-      {:cont, assign(socket, :current_user, nil)}
+      {:cont, socket}
     end
   end
 end
