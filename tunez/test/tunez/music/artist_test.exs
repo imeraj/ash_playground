@@ -43,21 +43,21 @@ defmodule Tunez.Music.ArtistTest do
 
     @tag :skip
     test "can filter by partial name matches" do
-      # ["hello", "goodbye", "what?"]
-      # |> Enum.each(&generate(artist(name: &1)))
+      ["hello", "goodbye", "what?"]
+      |> Enum.each(&generate(artist(name: &1)))
 
-      # assert Enum.sort(names(Music.search_artists!("o"))) == ["goodbye", "hello"]
-      # assert names(Music.search_artists!("oo")) == ["goodbye"]
-      # assert names(Music.search_artists!("he")) == ["hello"]
+      assert Enum.sort(names(Music.search_artists!("o"))) == ["goodbye", "hello"]
+      assert names(Music.search_artists!("oo")) == ["goodbye"]
+      assert names(Music.search_artists!("he")) == ["hello"]
     end
 
     @tag :skip
     test "can sort by name" do
-      # ["first", "third", "fourth", "second"]
-      # |> Enum.each(&generate(artist(name: &1)))
+      ["first", "third", "fourth", "second"]
+      |> Enum.each(&generate(artist(name: &1)))
 
-      # actual = names(Music.search_artists!("", query: [sort_input: "+name"]))
-      # assert actual == ["first", "fourth", "second", "third"]
+      actual = names(Music.search_artists!("", query: [sort_input: "+name"]))
+      assert actual == ["first", "fourth", "second", "third"]
     end
 
     @tag :skip
@@ -212,44 +212,41 @@ defmodule Tunez.Music.ArtistTest do
   end
 
   describe "policies" do
-    # def setup_users do
-    #   %{
-    #     admin: generate(user(role: :admin)),
-    #     editor: generate(user(role: :editor)),
-    #     user: generate(user(role: :user))
-    #   }
-    # end
+    def setup_users do
+      %{
+        admin: generate(user(role: :admin)),
+        editor: generate(user(role: :editor)),
+        user: generate(user(role: :user))
+      }
+    end
 
-    @tag skip: "Also uncomment the `setup_users` function above"
     test "only admins can create new artists" do
-      # users = setup_users()
+      users = setup_users()
 
-      # assert Music.can_create_artist?(users.admin)
-      # refute Music.can_create_artist?(users.editor)
-      # refute Music.can_create_artist?(users.user)
-      # refute Music.can_create_artist?(nil)
+      assert Music.can_create_artist?(users.admin)
+      refute Music.can_create_artist?(users.editor)
+      refute Music.can_create_artist?(users.user)
+      refute Music.can_create_artist?(nil)
     end
 
-    @tag skip: "Also uncomment the `setup_users` function above"
     test "only admins can delete artists" do
-      # users = setup_users()
-      # artist = generate(artist())
+      users = setup_users()
+      artist = generate(artist())
 
-      # assert Music.can_destroy_artist?(users.admin, artist)
-      # refute Music.can_destroy_artist?(users.editor, artist)
-      # refute Music.can_destroy_artist?(users.user, artist)
-      # refute Music.can_destroy_artist?(nil, artist)
+      assert Music.can_destroy_artist?(users.admin, artist)
+      refute Music.can_destroy_artist?(users.editor, artist)
+      refute Music.can_destroy_artist?(users.user, artist)
+      refute Music.can_destroy_artist?(nil, artist)
     end
 
-    @tag skip: "Also uncomment the `setup_users` function above"
     test "admins and editors can update artists" do
-      # users = setup_users()
-      # artist = generate(artist())
+      users = setup_users()
+      artist = generate(artist())
 
-      # assert Music.can_update_artist?(users.admin, artist)
-      # assert Music.can_update_artist?(users.editor, artist)
-      # refute Music.can_update_artist?(users.user, artist)
-      # refute Music.can_update_artist?(nil, artist)
+      assert Music.can_update_artist?(users.admin, artist)
+      assert Music.can_update_artist?(users.editor, artist)
+      refute Music.can_update_artist?(users.user, artist)
+      refute Music.can_update_artist?(nil, artist)
     end
   end
 end
