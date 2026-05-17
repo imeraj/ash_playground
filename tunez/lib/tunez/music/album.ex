@@ -12,6 +12,7 @@ defmodule Tunez.Music.Album do
 
   json_api do
     type "album"
+    includes [:tracks]
 
     # Default fields to return when no `fields` query param is provided
     default_fields [:id, :name, :year_released, :cover_image_url, :artist_id]
@@ -111,6 +112,7 @@ defmodule Tunez.Music.Album do
     end
 
     has_many :tracks, Tunez.Music.Track do
+      public? true
       sort order: :asc
     end
 

@@ -13,8 +13,8 @@ defmodule Tunez.Music.Artist do
 
   json_api do
     type "artist"
+    includes albums: [:tracks]
 
-    # Default fields to return when no `fields` query param is provided
     default_fields [
       :id,
       :name,
@@ -23,8 +23,6 @@ defmodule Tunez.Music.Artist do
       :latest_album_year_released
     ]
 
-    # Includable relationships
-    includes albums: []
     derive_filter? false
   end
 
