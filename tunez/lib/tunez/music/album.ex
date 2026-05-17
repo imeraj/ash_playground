@@ -32,14 +32,14 @@ defmodule Tunez.Music.Album do
     create :create do
       accept [:name, :year_released, :cover_image_url, :artist_id]
       argument :tracks, {:array, :map}
-      change manage_relationship(:tracks, type: :direct_control)
+      change manage_relationship(:tracks, type: :direct_control, order_is_key: :order)
     end
 
     update :update do
       accept [:name, :year_released, :cover_image_url]
       require_atomic? false
       argument :tracks, {:array, :map}
-      change manage_relationship(:tracks, type: :direct_control)
+      change manage_relationship(:tracks, type: :direct_control, order_is_key: :order)
     end
   end
 
@@ -116,6 +116,14 @@ defmodule Tunez.Music.Album do
 
     belongs_to :created_by, Tunez.Accounts.User
     belongs_to :updated_by, Tunez.Accounts.User
+  end
+
+  calculations do
+    calculate :duration, :string, Tunez.Music.Calculations.SecondsToMinutes
+  end
+
+  aggregates do
+    sum :duration_seconds, :tracks, :duration_seconds
   end
 
   identities do

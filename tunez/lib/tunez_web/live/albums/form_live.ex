@@ -1,5 +1,6 @@
 defmodule TunezWeb.Albums.FormLive do
   use TunezWeb, :live_view
+  on_mount {TunezWeb.LiveUserAuth, :live_user_required}
 
   def mount(%{"id" => album_id}, _session, socket) do
     album =
@@ -82,15 +83,15 @@ defmodule TunezWeb.Albums.FormLive do
         <.inputs_for :let={track_form} field={@form[:tracks]}>
           <tr data-id={track_form.index}>
             <td class="px-3 w-20">
-              <.input field={track_form[:order]} type="number" />
+              <span class="hero-bars-3 handle cursor-pointer" />
             </td>
             <td class="px-3">
               <label for={track_form[:name].id} class="hidden">Name</label>
               <.input field={track_form[:name]} />
             </td>
             <td class="px-3 w-36">
-              <label for={track_form[:duration_seconds].id} class="hidden">Duration</label>
-              <.input field={track_form[:duration_seconds]} />
+              <label for={track_form[:duration].id} class="hidden">Duration</label>
+              <.input field={track_form[:duration]} />
             </td>
             <td class="w-12">
               <.button_link
@@ -167,7 +168,12 @@ defmodule TunezWeb.Albums.FormLive do
     {:noreply, socket}
   end
 
-  def handle_event("reorder-tracks", %{"order" => _order}, socket) do
+  def handle_event("reorder-tracks", %{"order" => order}, socket) do
+    socket =
+      update(socket, :form, fn form ->
+        AshPhoenix.Form.sort_forms(form, [:tracks], order)
+      end)
+
     {:noreply, socket}
   end
 end
