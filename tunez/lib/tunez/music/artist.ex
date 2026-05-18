@@ -140,5 +140,9 @@ defmodule Tunez.Music.Artist do
     first :cover_image_url, :albums, :cover_image_url do
       public? true
     end
+
+    count :follower_count, :follower_relationships do
+      public? true
+    end
   end
 end

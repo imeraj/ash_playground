@@ -57,6 +57,7 @@ defmodule Tunez.Music do
         args: [:query],
         default_options: [
           load: [
+            :follower_count,
             :followed_by_me,
             :album_count,
             :latest_album_year_released,
