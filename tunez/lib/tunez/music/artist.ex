@@ -36,7 +36,7 @@ defmodule Tunez.Music.Artist do
   end
 
   actions do
-    defaults [:create, :read, :destroy]
+    defaults [:create, :read]
     default_accept [:name, :biography]
 
     update :update do
@@ -55,6 +55,11 @@ defmodule Tunez.Music.Artist do
       pagination offset?: true, default_limit: 12
 
       filter expr(contains(name, ^arg(:query)))
+    end
+
+    destroy :destroy do
+      primary? true
+      change cascade_destroy(:albums, return_notifications?: true, after_action?: false)
     end
   end
 
