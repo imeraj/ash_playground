@@ -35,6 +35,28 @@ defmodule EmailService do
   end
 
   @impl true
+  def backoff(error, _arguments, context, _options) do
+    case error do
+      %{type: :network_timeout} ->
+        # Exponential backoff for network issues
+        retry_count = Map.get(context, :current_try, 0)
+        delay_ms = (:math.pow(2, retry_count) * 1000) |> round() |> min(30_000)
+        IO.puts("⏰ Network timeout - backing off for #{delay_ms}ms")
+        delay_ms
+
+      %{type: :rate_limit} ->
+        # Longer fixed delay for rate limiting
+        # 10 seconds
+        delay_ms = 10_000
+        IO.puts("⏰ Rate limited - backing off for #{delay_ms}ms")
+        delay_ms
+
+      _ ->
+        :now
+    end
+  end
+
+  @impl true
   def compensate(error, _arguments, _context, _options) do
     case error do
       # Temporary failures - retry with helpful logging
