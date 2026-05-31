@@ -8,13 +8,15 @@ defmodule UserRegistration do
   step :validate_email do
     argument(:email, input(:email))
 
-    run(fn %{email: email}, _context ->
-      if String.contains?(email, "@") do
-        {:ok, email}
-      else
-        {:error, "Email must contain @"}
-      end
-    end)
+    run(&validate_email_address/2)
+  end
+
+  def validate_email_address(%{email: email}, _context) do
+    if String.contains?(email, "@") do
+      {:ok, email}
+    else
+      {:error, "Email must contain @"}
+    end
   end
 
   step :hash_password do
